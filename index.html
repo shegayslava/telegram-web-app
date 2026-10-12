@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Забота 24/7</title>
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS для красивой стилизации -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: var(--tg-theme-bg-color, #fdf2f8);
+      color: var(--tg-theme-text-color, #1f2937);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body class="p-4 flex flex-col items-center min-h-screen">
+
+  <!-- Шапка -->
+  <header class="text-center my-4">
+    <h1 class="text-2xl font-bold text-pink-600">Привет, конфетка ☀️</h1>
+    <p class="text-sm text-gray-500 mt-1">Твой личный сервис заботы</p>
+  </header>
+
+  <!-- Сетка красивых карточек-кнопок -->
+  <main class="w-full max-w-sm space-y-3">
+    
+    <!-- Комплимент -->
+    <div onclick="showCompliment()" class="cursor-pointer bg-white/80 backdrop-blur border border-pink-100 rounded-2xl p-4 shadow-sm active:scale-95 transition-all flex items-center space-x-3">
+      <div class="text-2xl">💌</div>
+      <div>
+        <div class="font-semibold text-gray-800">Комплимент дня</div>
+        <div class="text-xs text-gray-400">Нажми, чтобы прочитать</div>
+      </div>
+    </div>
+
+    <!-- Фото -->
+    <div onclick="showPhoto()" class="cursor-pointer bg-white/80 backdrop-blur border border-pink-100 rounded-2xl p-4 shadow-sm active:scale-95 transition-all flex items-center space-x-3">
+      <div class="text-2xl">📸</div>
+      <div>
+        <div class="font-semibold text-gray-800">Наше лучшее фото</div>
+        <div class="text-xs text-gray-400">Особенный момент</div>
+      </div>
+    </div>
+
+    <!-- Купоны -->
+    <div onclick="showCoupons()" class="cursor-pointer bg-white/80 backdrop-blur border border-pink-100 rounded-2xl p-4 shadow-sm active:scale-95 transition-all flex items-center space-x-3">
+      <div class="text-2xl">🎟</div>
+      <div>
+        <div class="font-semibold text-gray-800">Купоны</div>
+        <div class="text-xs text-gray-400">Активируй желаемое</div>
+      </div>
+    </div>
+
+    <!-- План -->
+    <div onclick="showPlan()" class="cursor-pointer bg-white/80 backdrop-blur border border-pink-100 rounded-2xl p-4 shadow-sm active:scale-95 transition-all flex items-center space-x-3">
+      <div class="text-2xl">📍</div>
+      <div>
+        <div class="font-semibold text-gray-800">План на вечер</div>
+        <div class="text-xs text-gray-400">Секретная локация</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Всплывающее модальное окно -->
+  <div id="modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-xs w-full shadow-xl text-center space-y-4">
+      <div id="modal-content" class="text-gray-700 text-sm"></div>
+      <button onclick="closeModal()" class="w-full py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-xl font-medium shadow-md shadow-pink-200 transition">
+        Закрыть
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // Разворачивает окно на весь экран
+
+    const COMPLIMENTS = [
+      "Ты так смешно морщишь нос, когда читаешь меню 🥹",
+      "Мне нравится, как ты смеёшься над своими же шутками.",
+      "С тобой даже обычный вторник превращается в событие."
+    ];
+
+    let complimentIdx = 0;
+
+    function openModal(htmlContent) {
+      document.getElementById('modal-content').innerHTML = htmlContent;
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    function showCompliment() {
+      const text = COMPLIMENTS[complimentIdx % COMPLIMENTS.length];
+      complimentIdx++;
+      openModal(`<div class="text-lg mb-2">💌</div><p class="font-medium">${text}</p>`);
+    }
+
+    function showPhoto() {
+      openModal(`
+        <img src="photo.jpg" class="rounded-2xl mb-3 w-full object-cover h-48" alt="Memory" />
+        <p class="font-semibold text-gray-800">Наш лучший вечер!</p>
+        <p class="text-xs text-gray-500 mt-1">Тут история этой фотографии...</p>
+      `);
+    }
+
+    function showCoupons() {
+      openModal(`
+        <h3 class="font-bold text-gray-800 mb-3">Доступные купоны:</h3>
+        <div class="space-y-2">
+          <button onclick="useCoupon('💆 Массаж 30 минут')" class="w-full text-left p-3 border rounded-xl hover:bg-pink-50 text-xs">💆 Массаж (30 мин)</button>
+          <button onclick="useCoupon('☕ Кофе в постель')" class="w-full text-left p-3 border rounded-xl hover:bg-pink-50 text-xs">☕ Кофе в любое время</button>
+        </div>
+      `);
+    }
+
+    function useCoupon(title) {
+      // Отправляем данные обратно боту в Telegram
+      tg.sendData(JSON.stringify({ action: "use_coupon", coupon: title }));
+      tg.HapticFeedback.notificationOccurred('success'); // Легкая вибрация телефона
+      openModal(`<div class="text-lg">🎉</div><p>Купон "${title}" активирован! Я уже получил уведомление.</p>`);
+    }
+
+    function showPlan() {
+      openModal(`<div class="text-lg mb-2">🤫</div><p class="font-medium">Подсказка: надень что-нибудь удобное и тёплое. Сегодня в 19:00!</p>`);
+    }
+  </script>
+</body>
+</html>
