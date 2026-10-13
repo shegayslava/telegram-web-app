@@ -186,6 +186,10 @@
   </div>
 
   <script>
+    // Предзагрузка гифки в кэш браузера при старте
+const planGifPreload = new Image();
+planGifPreload.src = "walk.gif";
+    
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
     if (tg && typeof tg.expand === 'function') {
       tg.expand();
