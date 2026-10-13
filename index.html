@@ -477,10 +477,29 @@
       }, 1500);
     }
 
-          function showPlan() {
-      const now = new Date();
+         function showPlan() {
+      const weekdays = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
       const pad = n => String(n).padStart(2, '0');
-      const minDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
+      // Ближайшие 30 дней
+      let dateOptions = '<option value="">Выбери день</option>';
+      for (let i = 0; i < 30; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        const value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const prefix = i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : weekdays[d.getDay()];
+        dateOptions += `<option value="${value}">${prefix}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}</option>`;
+      }
+
+      // Время с 10:00 до 22:00 с шагом в полчаса
+      let timeOptions = '<option value="">И время</option>';
+      for (let h = 13; h <= 22; h++) {
+        timeOptions += `<option value="${pad(h)}:00">${pad(h)}:00</option>`;
+        if (h < 22) timeOptions += `<option value="${pad(h)}:30">${pad(h)}:30</option>`;
+      }
+
+      const hideError = "document.getElementById('plan-error').classList.add('hidden')";
+      const selectClass = 'w-full px-3 rounded-xl border-2 border-sky-200 bg-white text-slate-800 font-medium';
 
       const content = `
         <div class="text-3xl mb-1">🍂</div>
@@ -508,25 +527,11 @@
         <div class="space-y-2.5 text-left">
           <div>
             <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1">Дата</div>
-            <div class="relative">
-              <div onclick="openPicker('plan-date')" class="w-full px-3 py-2.5 rounded-xl border-2 border-sky-200 bg-white flex items-center justify-between text-sm font-medium cursor-pointer">
-                <span id="plan-date-text" class="text-slate-400">Выбрать дату</span>
-                <span>📅</span>
-              </div>
-              <input id="plan-date" type="date" min="${minDate}" onchange="updatePlanView()" tabindex="-1"
-                class="absolute left-0 top-0 opacity-0 pointer-events-none" style="width:1px; height:1px; font-size:16px;" />
-            </div>
+            <select id="plan-date" onchange="${hideError}" class="${selectClass}" style="height:46px; font-size:16px;">${dateOptions}</select>
           </div>
           <div>
             <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1">Время</div>
-            <div class="relative">
-              <div onclick="openPicker('plan-time')" class="w-full px-3 py-2.5 rounded-xl border-2 border-sky-200 bg-white flex items-center justify-between text-sm font-medium cursor-pointer">
-                <span id="plan-time-text" class="text-slate-400">Выбрать время</span>
-                <span>🕒</span>
-              </div>
-              <input id="plan-time" type="time" onchange="updatePlanView()" tabindex="-1"
-                class="absolute left-0 top-0 opacity-0 pointer-events-none" style="width:1px; height:1px; font-size:16px;" />
-            </div>
+            <select id="plan-time" onchange="${hideError}" class="${selectClass}" style="height:46px; font-size:16px;">${timeOptions}</select>
           </div>
           <p id="plan-error" class="text-xs text-rose-600 font-semibold hidden">Выбери и дату, и время 🙂</p>
         </div>
@@ -542,42 +547,6 @@
       `;
 
       openModal(content, buttons);
-    }
-
-    // Открываем родное окно выбора по нажатию на любую часть нашего поля
-    function openPicker(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      try {
-        if (typeof el.showPicker === 'function') {
-          el.showPicker();
-          return;
-        }
-      } catch (e) {
-        // идём к запасному варианту
-      }
-      el.focus();
-      el.click();
-    }
-
-    // Показываем выбранные значения нашим текстом: родные поля iOS в окне Telegram рисуются криво
-    function updatePlanView() {
-      const date = document.getElementById('plan-date').value;
-      const time = document.getElementById('plan-time').value;
-      const dateText = document.getElementById('plan-date-text');
-      const timeText = document.getElementById('plan-time-text');
-      if (date) {
-        const [y, m, d] = date.split('-');
-        dateText.textContent = `${d}.${m}.${y}`;
-        dateText.className = 'text-slate-800';
-      }
-      if (time) {
-        timeText.textContent = time;
-        timeText.className = 'text-slate-800';
-      }
-      if (date && time) {
-        document.getElementById('plan-error').classList.add('hidden');
-      }
     }
 
     function submitPlan() {
