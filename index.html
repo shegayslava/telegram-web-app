@@ -545,7 +545,7 @@
       openModal(content, buttons);
     }
 
-    function submitPlan() {
+function submitPlan() {
   const date = document.getElementById('plan-date').value;
   const time = document.getElementById('plan-time').value;
   if (!date || !time) {
@@ -557,18 +557,13 @@
   const [y, m, d] = date.split('-');
 
   const content = `
-    <div class="p-1 bg-slate-900 pixel-box rounded-2xl mb-3 overflow-hidden">
-      <video 
-        id="plan-video"
-        src="Success.mp4" 
-        autoplay 
-        loop 
-        muted 
-        playsinline 
-        webkit-playsinline
-        preload="auto"
+    <div class="p-1 bg-slate-900 pixel-box rounded-2xl mb-3 overflow-hidden min-h-[160px] flex items-center justify-center">
+      <img 
+        src="Success.gif" 
+        alt="Success Animation"
         class="w-full h-auto max-h-52 object-cover rounded-xl"
-      ></video>
+        onerror="this.onerror=null; this.src='photo.jpg';"
+      />
     </div>
     <p class="font-bold text-emerald-600 text-sm">Ура, договорились! 🎉</p>
     <p class="text-xs text-gray-600 mt-1">Жду ${d}.${m}.${y} в ${time}<br>Скоро всё подтвержу ❤️</p>
@@ -582,21 +577,11 @@
 
   openModal(content, buttons);
 
-  // Принудительный запуск видео после вставки в DOM
-  setTimeout(() => {
-    const video = document.getElementById('plan-video');
-    if (video) {
-      video.muted = true; // Обязательно для автозапуска
-      video.play().catch(err => console.log("Video play error:", err));
-    }
-  }, 100);
-
-  // Задержка 3.5 секунды перед отправкой данных и закрытием
   setTimeout(() => {
     if (tg && tg.sendData) {
       tg.sendData(JSON.stringify({ action: 'plan_time', date: date, time: time }));
     }
-  }, 3500);
+  }, 5000);
 }
   </script>
 </body>
