@@ -477,29 +477,30 @@
       }, 1500);
     }
 
-         function showPlan() {
+    function showPlan() {
       const weekdays = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
       const pad = n => String(n).padStart(2, '0');
 
-      // Ближайшие 30 дней
-      let dateOptions = '<option value="">Например, завтра</option>';
+      // Подсказка в списке серая и не выбирается как значение (disabled hidden)
+      let dateOptions = '<option value="" disabled selected hidden>Например, завтра</option>';
       for (let i = 0; i < 30; i++) {
         const d = new Date();
         d.setDate(d.getDate() + i);
         const value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
         const prefix = i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : weekdays[d.getDay()];
-        dateOptions += `<option value="${value}">${prefix}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}</option>`;
+        dateOptions += `<option value="${value}" style="color:#1e293b">${prefix}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}</option>`;
       }
 
-      // Время с 10:00 до 22:00 с шагом в полчаса
-      let timeOptions = '<option value="">Часиков в 4</option>';
-      for (let h = 13; h <= 22; h++) {
-        timeOptions += `<option value="${pad(h)}:00">${pad(h)}:00</option>`;
-        if (h < 22) timeOptions += `<option value="${pad(h)}:30">${pad(h)}:30</option>`;
+      let timeOptions = '<option value="" disabled selected hidden>Часиков в 4</option>';
+      for (let h = 10; h <= 22; h++) {
+        timeOptions += `<option value="${pad(h)}:00" style="color:#1e293b">${pad(h)}:00</option>`;
+        if (h < 22) timeOptions += `<option value="${pad(h)}:30" style="color:#1e293b">${pad(h)}:30</option>`;
       }
 
-      const hideError = "document.getElementById('plan-error').classList.add('hidden')";
-      const selectClass = 'w-full px-3 rounded-xl border-2 border-sky-200 bg-white text-slate-800 font-medium';
+      // Пока ничего не выбрано, текст серый; после выбора становится тёмным
+      const onPick = "this.style.color='#1e293b'; document.getElementById('plan-error').classList.add('hidden')";
+      const selectClass = 'w-full px-3 rounded-xl border-2 border-sky-200 bg-white font-normal';
+      const selectStyle = 'height:46px; font-size:16px; color:#94a3b8;';
 
       const content = `
         <div class="text-3xl mb-1">🍂</div>
@@ -527,11 +528,11 @@
         <div class="space-y-2.5 text-left">
           <div>
             <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1">Дата</div>
-            <select id="plan-date" onchange="${hideError}" class="${selectClass}" style="height:46px; font-size:16px;">${dateOptions}</select>
+            <select id="plan-date" onchange="${onPick}" class="${selectClass}" style="${selectStyle}">${dateOptions}</select>
           </div>
           <div>
             <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1">Время</div>
-            <select id="plan-time" onchange="${hideError}" class="${selectClass}" style="height:46px; font-size:16px;">${timeOptions}</select>
+            <select id="plan-time" onchange="${onPick}" class="${selectClass}" style="${selectStyle}">${timeOptions}</select>
           </div>
           <p id="plan-error" class="text-xs text-rose-600 font-semibold hidden">Выбери и дату, и время 🙂</p>
         </div>
