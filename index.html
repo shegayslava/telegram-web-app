@@ -482,7 +482,7 @@
       const pad = n => String(n).padStart(2, '0');
 
       // Ближайшие 30 дней
-      let dateOptions = '<option value="">Выбери день</option>';
+      let dateOptions = '<option value="">Например, завтра</option>';
       for (let i = 0; i < 30; i++) {
         const d = new Date();
         d.setDate(d.getDate() + i);
@@ -492,7 +492,7 @@
       }
 
       // Время с 10:00 до 22:00 с шагом в полчаса
-      let timeOptions = '<option value="">И время</option>';
+      let timeOptions = '<option value="">Часиков в 4</option>';
       for (let h = 13; h <= 22; h++) {
         timeOptions += `<option value="${pad(h)}:00">${pad(h)}:00</option>`;
         if (h < 22) timeOptions += `<option value="${pad(h)}:30">${pad(h)}:30</option>`;
