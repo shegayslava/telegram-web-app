@@ -191,16 +191,15 @@
       tg.expand();
     }
 
-    // Использованные купоны приходят от бота через ссылку: ?used=win,coffee
     const USED = new Set(
       (new URLSearchParams(location.search).get('used') || '').split(',').filter(Boolean)
     );
     const COUPONS = [
       { id: 'win', icon: '👑', title: 'Победа в любом споре' },
-      { id: 'truth',   icon: '😚', title: 'Правда или действие' },
-      { id: 'telegram',   icon: '💌', title: 'Telegram Premium' },
-      { id: 'hands',  icon: '🫂', title: '«Хочу на ручки»' },
-      { id: 'sweets',  icon: '🍬', title: 'Вкусняшки' }
+      { id: 'truth', icon: '😚', title: 'Правда или действие' },
+      { id: 'telegram', icon: '💌', title: 'Telegram Premium' },
+      { id: 'hands', icon: '🫂', title: '«Хочу на ручки»' },
+      { id: 'sweets', icon: '🍬', title: 'Вкусняшки' }
     ];
 
     let audioCtx = null;
@@ -224,7 +223,7 @@
         osc.start();
         osc.stop(audioCtx.currentTime + duration);
       } catch (e) {
-        // Игнорируем блокировки автозвука
+        // Игнорируем автозвук
       }
     }
 
@@ -300,7 +299,7 @@
       }
     ];
 
-        function makeShuffler(items) {
+    function makeShuffler(items) {
       let queue = [];
       let last = null;
       return function next() {
@@ -310,7 +309,6 @@
             const j = Math.floor(Math.random() * (i + 1));
             [queue[i], queue[j]] = [queue[j], queue[i]];
           }
-          // чтобы последний показанный не выпал первым в новом круге
           if (queue.length > 1 && queue[queue.length - 1] === last) {
             [queue[0], queue[queue.length - 1]] = [queue[queue.length - 1], queue[0]];
           }
@@ -469,7 +467,6 @@
 
       openModal(content, buttons);
 
-      // После sendData приложение закрывается, поэтому даём время увидеть экран
       setTimeout(() => {
         if (tg && tg.sendData) {
           tg.sendData(JSON.stringify({ action: 'use_coupon', coupon: id }));
@@ -481,7 +478,6 @@
       const weekdays = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
       const pad = n => String(n).padStart(2, '0');
 
-      // Подсказка в списке серая и не выбирается как значение (disabled hidden)
       let dateOptions = '<option value="" disabled selected hidden>Например, завтра</option>';
       for (let i = 0; i < 30; i++) {
         const d = new Date();
@@ -497,7 +493,6 @@
         if (h < 22) timeOptions += `<option value="${pad(h)}:30" style="color:#1e293b">${pad(h)}:30</option>`;
       }
 
-      // Пока ничего не выбрано, текст серый; после выбора становится тёмным
       const onPick = "this.style.color='#1e293b'; document.getElementById('plan-error').classList.add('hidden')";
       const selectClass = 'w-full px-3 rounded-xl border-2 border-sky-200 bg-white font-normal';
       const selectStyle = 'height:46px; font-size:16px; color:#94a3b8;';
@@ -551,34 +546,58 @@
     }
 
     function submitPlan() {
-      const date = document.getElementById('plan-date').value;
-      const time = document.getElementById('plan-time').value;
-      if (!date || !time) {
-        document.getElementById('plan-error').classList.remove('hidden');
-        return;
-      }
-      playRetroSound(880, 'square', 0.15);
+  const date = document.getElementById('plan-date').value;
+  const time = document.getElementById('plan-time').value;
+  if (!date || !time) {
+    document.getElementById('plan-error').classList.remove('hidden');
+    return;
+  }
+  playRetroSound(880, 'square', 0.15);
 
-      const [y, m, d] = date.split('-');
-      const content = `
-        <div class="text-3xl mb-2">💕</div>
-        <p class="font-bold text-emerald-600 text-sm">Отправлено!</p>
-        <p class="text-xs text-gray-600 mt-1.5">${d}.${m}.${y} в ${time}<br>Понел-принял, скоро всё подтвержу ❤️</p>
-      `;
-      const buttons = `
-        <button onclick="closeModal()" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold pixel-button rounded-xl text-xs">
-          Отлично 💕
-        </button>
-      `;
-      openModal(content, buttons);
+  const [y, m, d] = date.split('-');
 
-      // После sendData приложение закрывается, поэтому даём время увидеть экран
-      setTimeout(() => {
-        if (tg && tg.sendData) {
-          tg.sendData(JSON.stringify({ action: 'plan_time', date: date, time: time }));
-        }
-      }, 1500);
+  const content = `
+    <div class="p-1 bg-slate-900 pixel-box rounded-2xl mb-3 overflow-hidden">
+      <video 
+        id="plan-video"
+        src="success.mp4" 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        webkit-playsinline
+        preload="auto"
+        class="w-full h-auto max-h-52 object-cover rounded-xl"
+      ></video>
+    </div>
+    <p class="font-bold text-emerald-600 text-sm">Ура, договорились! 🎉</p>
+    <p class="text-xs text-gray-600 mt-1">Жду ${d}.${m}.${y} в ${time}<br>Скоро всё подтвержу ❤️</p>
+  `;
+
+  const buttons = `
+    <button onclick="closeModal()" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold pixel-button rounded-xl text-xs">
+      Отлично 💕
+    </button>
+  `;
+
+  openModal(content, buttons);
+
+  // Принудительный запуск видео после вставки в DOM
+  setTimeout(() => {
+    const video = document.getElementById('plan-video');
+    if (video) {
+      video.muted = true; // Обязательно для автозапуска
+      video.play().catch(err => console.log("Video play error:", err));
     }
+  }, 100);
+
+  // Задержка 3.5 секунды перед отправкой данных и закрытием
+  setTimeout(() => {
+    if (tg && tg.sendData) {
+      tg.sendData(JSON.stringify({ action: 'plan_time', date: date, time: time }));
+    }
+  }, 3500);
+}
   </script>
 </body>
 </html>
