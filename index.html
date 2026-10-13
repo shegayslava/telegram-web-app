@@ -109,7 +109,7 @@
 
       <!-- Изящный подзаголовок -->
       <div class="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[11px] font-medium tracking-wide shadow-sm">
-        Посмотри, что у меня есть для тебя
+        Посмотри, что есть для тебя
       </div>
     </header>
 
@@ -133,8 +133,8 @@
         <div class="flex items-center space-x-3.5">
           <span class="text-2xl">📸</span>
           <div class="text-left">
-            <div class="font-bold text-sm leading-tight">Наши лучшие фото</div>
-            <div class="text-xs text-purple-100 font-medium mt-0.5">Особенные моменты</div>
+            <div class="font-bold text-sm leading-tight">Забавные фото</div>
+            <div class="text-xs text-purple-100 font-medium mt-0.5">С тобой, со мной и нашими попсиками</div>
           </div>
         </div>
         <span class="text-lg font-bold group-hover:translate-x-1 transition-transform">›</span>
@@ -145,8 +145,8 @@
         <div class="flex items-center space-x-3.5">
           <span class="text-2xl">🎟</span>
           <div class="text-left">
-            <div class="font-bold text-sm leading-tight">Купоны желания</div>
-            <div class="text-xs text-amber-900 font-medium mt-0.5">Выбирай и активируй</div>
+            <div class="font-bold text-sm leading-tight">Купоны желаний</div>
+            <div class="text-xs text-amber-900 font-medium mt-0.5">Выбирай, что понравится</div>
           </div>
         </div>
         <span class="text-lg font-bold group-hover:translate-x-1 transition-transform">›</span>
@@ -158,7 +158,7 @@
           <span class="text-2xl">📍</span>
           <div class="text-left">
             <div class="font-bold text-sm leading-tight">План на вечер</div>
-            <div class="text-xs text-sky-100 font-medium mt-0.5">Секретная подсказка</div>
+            <div class="text-xs text-sky-100 font-medium mt-0.5">Выбери время для прогулки</div>
           </div>
         </div>
         <span class="text-lg font-bold group-hover:translate-x-1 transition-transform">›</span>
@@ -191,14 +191,16 @@
       tg.expand();
     }
 
-    // Использованные купоны приходят от бота через ссылку: ?used=massage,coffee
+    // Использованные купоны приходят от бота через ссылку: ?used=win,coffee
     const USED = new Set(
       (new URLSearchParams(location.search).get('used') || '').split(',').filter(Boolean)
     );
     const COUPONS = [
-      { id: 'massage', icon: '💆', title: 'Массаж (30 мин)' },
-      { id: 'coffee',  icon: '☕', title: 'Кофе в любое время' },
-      { id: 'movie',   icon: '🎬', title: 'Любой фильм' },
+      { id: 'win', icon: '👑', title: 'Победа в любом споре' },
+      { id: 'truth',   icon: '😚', title: 'Правда или действие' },
+      { id: 'telegram',   icon: '💌', title: 'Telegram Premium' },
+      { id: 'hands',  icon: '🫂', title: '«Хочу на ручки»' },
+      { id: 'sweets',  icon: '🍬', title: 'Вкусняшки' }
     ];
 
     let audioCtx = null;
@@ -239,28 +241,87 @@
     ];
 
     const COMPLIMENTS = [
-      "Ты так смешно морщишь нос, когда читаешь меню 🥹",
-      "Мне нравится, как ты смеёшься над своими же шутками.",
-      "С тобой даже обычный вторник превращается в событие.",
-      "Твой голосок — лучшее, что я могу услышать за день.",
-      "Обожаю, когда ты держишь меня за руку."
+      "Твои губы 🥹",
+      "Мне нравится, как ты шутишь",
+      "Нравится с тобой целоваться",
+      "У тебя красивые руки",
+      "Будем сосаться сегодня?",
+      "Хочется обнять тебя",
+      "Горжусь тобой",
+      "Ты самостоятельная, это восхищает",
+      "Ты очень красивая",
+      "У тебя красивые ножки",
+      "Твоя фигура 😍",
+      "Пиццу или суши?",
+      "Ты вкусно пахнешь",
+      "Нравится твоя эстетика",
+      "Люблю твой смех, кваки и хрюки",
+      "Ты эмпатична",
+      "Ты вау-мяу",
+      "Выглядишь прекрасно",
+      "10 из 10"
     ];
 
     const PHOTOS = [
       {
         src: "photo.jpg",
-        title: "Наш лучший вечер!",
-        desc: "Тут история этой фотографии..."
+        title: "Моджиточник 😋",
+        desc: "В тот день к тебе на работу пришла мама с Мошкой"
       },
       {
         src: "photo2.jpg",
-        title: "Особенный день ✨",
-        desc: "Каждый момент с тобой бесценен!"
+        title: "Мем",
+        desc: "Кажется, что одновременно похож и на Севку, и на Мошку"
+      },
+      {
+        src: "photo3.jpg",
+        title: "Весенний денёк 🌅",
+        desc: "Сделали классные фото в тот день"
+      },
+      {
+        src: "photo4.jpg",
+        title: "Шо за тип",
+        desc: "Ты всегда меня так загадочно фоткаешь"
+      },
+      {
+        src: "photo5.jpg",
+        title: "Соус соус соус",
+        desc: "Вкусненький соус"
+      },
+      {
+        src: "photo6.jpg",
+        title: "😆",
+        desc: "..."
+      }, 
+      {
+        src: "photo7.jpg",
+        title: "Фонар",
+        desc: "Когда ещё поиграем, кстати?"
       }
     ];
 
-    let complimentIdx = 0;
-    let photoIdx = 0;
+        function makeShuffler(items) {
+      let queue = [];
+      let last = null;
+      return function next() {
+        if (queue.length === 0) {
+          queue = [...items];
+          for (let i = queue.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [queue[i], queue[j]] = [queue[j], queue[i]];
+          }
+          // чтобы последний показанный не выпал первым в новом круге
+          if (queue.length > 1 && queue[queue.length - 1] === last) {
+            [queue[0], queue[queue.length - 1]] = [queue[queue.length - 1], queue[0]];
+          }
+        }
+        last = queue.pop();
+        return last;
+      };
+    }
+
+    const nextCompliment = makeShuffler(COMPLIMENTS);
+    const nextPhoto = makeShuffler(PHOTOS);
 
     function setRandomGreeting() {
       try {
@@ -319,8 +380,7 @@
     }
 
     function showCompliment() {
-      const text = COMPLIMENTS[complimentIdx % COMPLIMENTS.length];
-      complimentIdx++;
+      const text = nextCompliment();
       
       const content = `
         <div class="text-3xl mb-2">💌</div>
@@ -340,8 +400,7 @@
     }
 
     function showPhoto() {
-      const currentPhoto = PHOTOS[photoIdx % PHOTOS.length];
-      photoIdx++;
+      const currentPhoto = nextPhoto();
 
       const content = `
         <div class="p-1 bg-slate-900 pixel-box rounded-xl mb-3 overflow-hidden">
@@ -367,7 +426,7 @@
       const items = COUPONS.map(c => USED.has(c.id)
         ? `<div class="w-full text-left p-2.5 bg-gray-100 border border-gray-200 rounded-xl text-xs font-semibold text-gray-400 flex items-center justify-between">
              <span class="line-through">${c.icon} ${c.title}</span>
-             <span>Использован</span>
+             <span>Исполнено ✨</span>
            </div>`
         : `<button onclick="useCoupon('${c.id}')" class="w-full text-left p-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl text-xs font-semibold text-slate-800 flex items-center justify-between">
              <span>${c.icon} ${c.title}</span>
@@ -377,7 +436,7 @@
 
       const content = `
         <div class="text-3xl mb-1">🎟</div>
-        <h3 class="font-bold text-slate-900 text-sm mb-3">Доступные купоны:</h3>
+        <h3 class="font-bold text-slate-900 text-sm mb-3">Чем тебя порадовать?</h3>
         <div class="space-y-2">${items}</div>
       `;
 
@@ -399,7 +458,7 @@
       const content = `
         <div class="text-3xl mb-2">🎉</div>
         <p class="font-bold text-emerald-600 text-sm">Купон активирован!</p>
-        <p class="text-xs text-gray-600 mt-1.5">«${coupon.icon} ${coupon.title}»<br>Я уже получил уведомление 😉</p>
+        <p class="text-xs text-gray-600 mt-1.5">«${coupon.icon} ${coupon.title}»<br>Я уже получил уведомление ❤️</p>
       `;
 
       const buttons = `
@@ -419,19 +478,86 @@
     }
 
     function showPlan() {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const minDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
       const content = `
-        <div class="text-3xl mb-1">🤫</div>
-        <p class="font-bold text-sky-600 text-sm mb-1">Секретный план</p>
-        <p class="text-xs text-slate-600 leading-relaxed">Подсказка: надень что-нибудь удобное и тёплое.<br>Сегодня в 19:00!</p>
+        <div class="text-3xl mb-1">🍂</div>
+        <p class="font-bold text-sky-600 text-base mb-3">Приглашение на прогулку</p>
+
+        <div class="bg-sky-50 border-2 border-sky-100 rounded-2xl p-3 mb-3 space-y-2 text-left">
+          <div class="flex items-start gap-2.5">
+            <span class="text-lg leading-none">☕</span>
+            <span class="text-xs text-slate-700 leading-snug">С кофе или какао</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="text-lg leading-none">⏱️</span>
+            <span class="text-xs text-slate-700 leading-snug">Примерно час-полтора</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="text-lg leading-none">🫶</span>
+            <span class="text-xs text-slate-700 leading-snug">Ничего особенного, но важно: держимся за руки и тактильничаем</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-snug mb-2.5">
+          Выбери день и время, когда тебе удобно, <br>а я подстроюсь</br>
+        </p>
+
+        <div class="grid grid-cols-2 gap-2 text-left">
+          <label class="block min-w-0 text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Дата
+            <input id="plan-date" type="date" min="${minDate}"
+              class="mt-1 w-full min-w-0 px-2 py-2 rounded-xl border-2 border-sky-200 bg-white text-slate-800 normal-case tracking-normal font-medium" style="font-size:15px" />
+          </label>
+          <label class="block min-w-0 text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Время
+            <input id="plan-time" type="time"
+              class="mt-1 w-full min-w-0 px-2 py-2 rounded-xl border-2 border-sky-200 bg-white text-slate-800 normal-case tracking-normal font-medium" style="font-size:15px" />
+          </label>
+        </div>
+        <p id="plan-error" class="text-xs text-rose-600 font-semibold mt-2 hidden">Выбери и дату, и время 🙂</p>
       `;
 
       const buttons = `
-        <button onclick="closeModal()" class="w-full py-2.5 bg-sky-500 hover:bg-sky-600 text-white font-bold pixel-button rounded-xl text-xs">
-          Буду готова 😉
+        <button onclick="submitPlan()" class="w-full py-2.5 bg-sky-500 hover:bg-sky-600 text-white font-bold pixel-button rounded-xl text-xs">
+          Отправить 💌
+        </button>
+        <button onclick="closeModal()" class="w-full py-2 bg-gray-100 hover:bg-gray-200 text-slate-700 font-medium rounded-xl text-xs">
+          Назад
         </button>
       `;
 
       openModal(content, buttons);
+    }
+
+    function submitPlan() {
+      const date = document.getElementById('plan-date').value;
+      const time = document.getElementById('plan-time').value;
+      if (!date || !time) {
+        document.getElementById('plan-error').classList.remove('hidden');
+        return;
+      }
+      playRetroSound(880, 'square', 0.15);
+
+      const [y, m, d] = date.split('-');
+      const content = `
+        <div class="text-3xl mb-2">💕</div>
+        <p class="font-bold text-emerald-600 text-sm">Отправлено!</p>
+        <p class="text-xs text-gray-600 mt-1.5">${d}.${m}.${y} в ${time}<br>Понел-принял, скоро всё подтвержу ❤️</p>
+      `;
+      const buttons = `
+        <button onclick="closeModal()" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold pixel-button rounded-xl text-xs">
+          Отлично 💕
+        </button>
+      `;
+      openModal(content, buttons);
+
+      // После sendData приложение закрывается, поэтому даём время увидеть экран
+      setTimeout(() => {
+        if (tg && tg.sendData) {
+          tg.sendData(JSON.stringify({ action: 'plan_time', date: date, time: time }));
+        }
+      }, 1500);
     }
   </script>
 </body>
